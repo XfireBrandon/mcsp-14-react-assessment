@@ -1,7 +1,31 @@
+import { useEffect, useState } from "react";
+import axios from 'axios';
+import Loading from "./Components/loading";
+import Post from "./Components/post";
+
 const App = () => {
     // use the useEffect hook to make an initial API call to the url: 
     const url = 'https://jsonplaceholder.typicode.com/posts'
 
+    const [posts, setPosts] = useState([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        async function getPosts() {
+            const response = await axios.get(url)
+            
+            setPosts(response.data)
+            setLoading(false)
+        }
+
+        getPosts()
+    }, [])
+
+    if(!loading) {
+        return <Post postProp={posts}/>
+    } else {
+        return <Loading />
+    }
     // your stat should be: 
         // posts and loading. 
     // Use the useState hook to set the initial state
@@ -12,7 +36,7 @@ const App = () => {
 
     // the end result is that you should be able to click on an individual post and console.log the id of that post. 
 
-    return <h1>This is the app component. Read instructions in app.js.</h1>
+
 }
 
 export default App
